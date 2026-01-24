@@ -52,11 +52,7 @@ public class ControladorWASDMouse : MonoBehaviour
         inputVertical = Input.GetAxis("Vertical");
         inputJump = Input.GetAxis("Jump") == 1f;
         inputSprint = Input.GetAxis("Fire3") == 1f;
-        inputLeftClick = Input.GetAxis("Fire1") == 1f;
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            Debug.Log("Apretastes click");
-        }
+        
         // Unfortunately GetAxis does not work with GetKeyDown, so inputs must be taken individually
         inputCrouch = Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.JoystickButton1);
 
@@ -91,7 +87,6 @@ public class ControladorWASDMouse : MonoBehaviour
         if ( inputJump && cc.isGrounded )
         {
             isJumping = true;
-            Debug.Log("Apretastes click");
             // Disable crounching when jumping
             //isCrouching = false; 
         }
