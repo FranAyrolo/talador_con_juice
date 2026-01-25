@@ -9,16 +9,31 @@ public class ThirdPersonController : MonoBehaviour
     public float sprintAdittion = 3.5f;
     [Tooltip("Force that pulls the player down. Changing this value causes all movement, jumping and falling to be changed as well.")]
     public float gravity = 9.8f;
-    //Aca van los hombros y codo para poder animar
-    [Tooltip("Transform Hombro Derecho")]
-    public Transform trans_right_shoulder = null;
-    [Tooltip("Transform Codo Derecho")]
-    public Transform trans_right_elbow = null;
-    [Tooltip("Transform Hombro Izquierdo")]
-    public Transform trans_left_shoulder = null;
+    [Tooltip("Multiplicador de la velocidad de rotación de los brazos")]
+    public float swingMultiplier = 1.0f;
+    [Tooltip("Inclinación máxima de los brazos")]
+    public float maxDollyPitch = 70f;
+    [Tooltip("Rotación máxima de los brazos")]
+    public float maxDollyRotation = 70f;
 
+    //Aca van los hombros y codo para poder animar
+    //Nada de esto hace falta que sea publico, lo puedo atrapar por código hardcodeando con la jerarquía
+    [Tooltip("Transform Hombro Derecho")]
+    public Transform transRightShoulder = null;
+    [Tooltip("Transform Codo Derecho")]
+    public Transform transRightElbow = null;
+    [Tooltip("Transform Hombro Izquierdo")]
+    public Transform transLeftShoulder = null;
     [Tooltip("Transform Codo Izquierdo")]
-    public Transform trans_left_elbow = null;
+    public Transform transLeftElbow = null;
+    [Tooltip("Transform Codo Izquierdo")]
+    public Transform armsDolly = null;
+
+    Transform transBaseRight = null;
+    Transform transBaseLeft = null;
+    Transform lookAtRight = null;
+    Transform lookAtLeft = null;
+    
 
     // Player states
     bool isSprinting = false;
@@ -29,35 +44,49 @@ public class ThirdPersonController : MonoBehaviour
     bool inputSprint;
     bool inputLeftClick;
     bool inputRightClick;
+    float mouseHorizontalSpeed;
+    float mouseVerticalSpeed;
+    Vector3 dollyRotation = Vector3.zero;
 
     Animator animator;
     CharacterController cc;
-
+    
 
     void Start()
     {
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
 
-        if (trans_right_shoulder == null || trans_right_elbow == null || 
-                trans_left_shoulder == null || trans_left_elbow == null)
+        if (transRightShoulder == null || transRightElbow == null || 
+                transLeftShoulder == null || transLeftElbow == null ||
+                    armsDolly == null)
         {
             Debug.LogError("NO PUSISTE ALGÚN CODO U HOMBRO");
             //Este quit() no hace nada por algún motivo, y no creo que John Unity esté al tanto
             Application.Quit();
         }
+
+        transBaseRight = transform.Find("DollyBrazos/TransBaseDerecho");
+        transBaseLeft = transform.Find("DollyBrazos/TransBaseIzquierdo");
+        lookAtRight = transform.Find("DollyBrazos/TransBaseDerecho/LookAtDerecho");
+        lookAtLeft = transform.Find("DollyBrazos/TransBaseIzquierdo/LookAtIzquierdo");
     }
 
 
     private void LateUpdate() 
     {
-        trans_right_shoulder.Rotate(Vector3.up);
-        trans_right_elbow.Rotate(Vector3.right);
-        trans_left_shoulder.Rotate(Vector3.up);
-        trans_left_elbow.Rotate(Vector3.left);
+        //acomodar el brazo derecho
+        transRightShoulder.position = transBaseRight.position;
+        Vector3 direction = lookAtRight.position - transBaseRight.position;
+        //el hombro del modelo tiene la rotación de base para cualquier lado, este -90 -90 lo endereza
+        Quaternion lookRot = Quaternion.LookRotation(direction) * Quaternion.Euler(0, -90, -90);
+        transRightShoulder.rotation = lookRot;
+
+        transLeftShoulder.position = transBaseLeft.position;
+        transLeftShoulder.rotation = Quaternion.LookRotation(lookAtLeft.position - transBaseLeft.position) * Quaternion.Euler(0, -270, 90);
+
     }
 
-    // Update is only being used here to identify keys and trigger animations
     void Update()
     {
 
@@ -66,11 +95,12 @@ public class ThirdPersonController : MonoBehaviour
         inputVertical = Input.GetAxis("Vertical");
         inputSprint = Input.GetAxis("Fire3") == 1f;
         inputLeftClick = Input.GetAxis("Fire1") == 1f;
-        if (Input.GetMouseButton(0))
-        {
-            Debug.Log("hizo click");
-        }
+        mouseHorizontalSpeed = Input.GetAxis("Mouse X");
+        mouseVerticalSpeed = Input.GetAxis("Mouse Y");
 
+        dollyRotation.x = Mathf.Clamp(dollyRotation.x - mouseVerticalSpeed * swingMultiplier, -maxDollyPitch, maxDollyPitch);
+        dollyRotation.z = Mathf.Clamp(dollyRotation.z - mouseHorizontalSpeed * swingMultiplier, -maxDollyRotation, maxDollyRotation);
+        armsDolly.localRotation = Quaternion.Euler(dollyRotation);
 
         // Unfortunately GetAxis does not work with GetKeyDown, so inputs must be taken individually
         //inputCrouch = Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.JoystickButton1);

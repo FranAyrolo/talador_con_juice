@@ -482,6 +482,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &855373467 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5773346488780204143, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+  m_PrefabInstance: {fileID: 1810977874}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &883976467
 GameObject:
   m_ObjectHideFlags: 3
@@ -561,6 +566,16 @@ Transform:
   - {fileID: 765621324}
   m_Father: {fileID: 1045752833}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &885102651 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3923014965803630668, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+  m_PrefabInstance: {fileID: 1810977874}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &927474751 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9072374481875536676, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+  m_PrefabInstance: {fileID: 1810977874}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1254,13 +1269,37 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3310129599138967072, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: armsDolly
+      value: 
+      objectReference: {fileID: 885102651}
+    - target: {fileID: 3310129599138967072, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: arms_dolly
+      value: 
+      objectReference: {fileID: 885102651}
+    - target: {fileID: 3310129599138967072, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: transLeftElbow
+      value: 
+      objectReference: {fileID: 855373467}
+    - target: {fileID: 3310129599138967072, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: transRightElbow
+      value: 
+      objectReference: {fileID: 927474751}
+    - target: {fileID: 3310129599138967072, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
       propertyPath: trans_left_elbow
       value: 
       objectReference: {fileID: 186680247}
     - target: {fileID: 3310129599138967072, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: transLeftShoulder
+      value: 
+      objectReference: {fileID: 2001102143}
+    - target: {fileID: 3310129599138967072, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
       propertyPath: trans_right_elbow
       value: 
       objectReference: {fileID: 148694850}
+    - target: {fileID: 3310129599138967072, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: transRightShoulder
+      value: 
+      objectReference: {fileID: 2007886435}
     - target: {fileID: 3310129599138967072, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
       propertyPath: trans_left_shoulder
       value: 
@@ -1269,6 +1308,10 @@ PrefabInstance:
       propertyPath: trans_right_shoulder
       value: 
       objectReference: {fileID: 2007886435}
+    - target: {fileID: 3310129599138967072, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
+      propertyPath: arms_reference_sphere
+      value: 
+      objectReference: {fileID: 885102651}
     - target: {fileID: 3310129599138967072, guid: 268bbd229edfdba45a4d45903e472716, type: 3}
       propertyPath: right_shoulder_transform
       value: 
