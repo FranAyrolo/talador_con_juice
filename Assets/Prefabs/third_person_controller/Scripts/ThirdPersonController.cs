@@ -9,6 +9,16 @@ public class ThirdPersonController : MonoBehaviour
     public float sprintAdittion = 3.5f;
     [Tooltip("Force that pulls the player down. Changing this value causes all movement, jumping and falling to be changed as well.")]
     public float gravity = 9.8f;
+    //Aca van los hombros y codo para poder animar
+    [Tooltip("Transform Hombro Derecho")]
+    public Transform trans_right_shoulder = null;
+    [Tooltip("Transform Codo Derecho")]
+    public Transform trans_right_elbow = null;
+    [Tooltip("Transform Hombro Izquierdo")]
+    public Transform trans_left_shoulder = null;
+
+    [Tooltip("Transform Codo Izquierdo")]
+    public Transform trans_left_elbow = null;
 
     // Player states
     bool isSprinting = false;
@@ -28,8 +38,24 @@ public class ThirdPersonController : MonoBehaviour
     {
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+
+        if (trans_right_shoulder == null || trans_right_elbow == null || 
+                trans_left_shoulder == null || trans_left_elbow == null)
+        {
+            Debug.LogError("NO PUSISTE ALGÚN CODO U HOMBRO");
+            //Este quit() no hace nada por algún motivo, y no creo que John Unity esté al tanto
+            Application.Quit();
+        }
     }
 
+
+    private void LateUpdate() 
+    {
+        trans_right_shoulder.Rotate(Vector3.up);
+        trans_right_elbow.Rotate(Vector3.right);
+        trans_left_shoulder.Rotate(Vector3.up);
+        trans_left_elbow.Rotate(Vector3.left);
+    }
 
     // Update is only being used here to identify keys and trigger animations
     void Update()
@@ -113,4 +139,5 @@ public class ThirdPersonController : MonoBehaviour
         cc.Move( movement );
 
     }
+
 }
