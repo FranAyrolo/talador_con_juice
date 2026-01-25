@@ -682,8 +682,8 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: talador_con_juice
-  metroPackageVersion: 
+  metroPackageName: taladorconjuice
+  metroPackageVersion: 1.0.0.0
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
@@ -691,7 +691,7 @@ PlayerSettings:
   metroCertificateNotAfter: 0000000000000000
   metroApplicationDescription: talador_con_juice
   wsaImages: {}
-  metroTileShortName: 
+  metroTileShortName: talador_con_juice
   metroTileShowName: 0
   metroMediumTileShowName: 0
   metroLargeTileShowName: 0

@@ -46,7 +46,8 @@ public class ThirdPersonController : MonoBehaviour
     bool inputRightClick;
     float mouseHorizontalSpeed;
     float mouseVerticalSpeed;
-    Vector3 dollyRotation = Vector3.zero;
+    float dollyRotation;
+    float armsPitch;
 
     Animator animator;
     CharacterController cc;
@@ -54,6 +55,7 @@ public class ThirdPersonController : MonoBehaviour
 
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
 
@@ -98,9 +100,13 @@ public class ThirdPersonController : MonoBehaviour
         mouseHorizontalSpeed = Input.GetAxis("Mouse X");
         mouseVerticalSpeed = Input.GetAxis("Mouse Y");
 
-        dollyRotation.x = Mathf.Clamp(dollyRotation.x - mouseVerticalSpeed * swingMultiplier, -maxDollyPitch, maxDollyPitch);
-        dollyRotation.z = Mathf.Clamp(dollyRotation.z - mouseHorizontalSpeed * swingMultiplier, -maxDollyRotation, maxDollyRotation);
-        armsDolly.localRotation = Quaternion.Euler(dollyRotation);
+        dollyRotation = Mathf.Clamp(dollyRotation - mouseHorizontalSpeed * swingMultiplier, -maxDollyRotation, maxDollyRotation);
+        armsDolly.localRotation = Quaternion.Euler(0f, 0f, dollyRotation);
+
+        armsPitch = Mathf.Clamp(armsPitch - mouseVerticalSpeed * swingMultiplier, -maxDollyPitch, maxDollyPitch);
+        transBaseRight.localRotation = Quaternion.Euler(armsPitch, 0f, 0f);
+        transBaseLeft.localRotation = Quaternion.Euler(armsPitch, 0f, 0f);
+        
 
         // Unfortunately GetAxis does not work with GetKeyDown, so inputs must be taken individually
         //inputCrouch = Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.JoystickButton1);
