@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class ThirdPersonController : MonoBehaviour
 {
@@ -51,6 +52,8 @@ public class ThirdPersonController : MonoBehaviour
 
     Animator animator;
     CharacterController cc;
+    List<Transform> inventory;
+    Transform heldItem = null;
     
 
     void Start()
@@ -58,6 +61,7 @@ public class ThirdPersonController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         cc = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        inventory = new List<Transform>();
 
         if (transRightShoulder == null || transRightElbow == null || 
                 transLeftShoulder == null || transLeftElbow == null ||
@@ -83,33 +87,41 @@ public class ThirdPersonController : MonoBehaviour
         //el hombro del modelo tiene la rotación de base para cualquier lado, este -90 -90 lo endereza
         Quaternion lookRot = Quaternion.LookRotation(direction) * Quaternion.Euler(0, -90, -90);
         transRightShoulder.rotation = lookRot;
-
+        //Y ahora el izquierdo pero compacto
         transLeftShoulder.position = transBaseLeft.position;
         transLeftShoulder.rotation = Quaternion.LookRotation(lookAtLeft.position - transBaseLeft.position) * Quaternion.Euler(0, -270, 90);
+
+        if (heldItem)
+        {
+            heldItem.position = lookAtLeft.position + (lookAtRight.position - lookAtLeft.position) / 2;
+            heldItem.rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, -90, -90);
+        }
 
     }
 
     void Update()
     {
-
-        // Input checkers
         inputHorizontal = Input.GetAxis("Horizontal");
         inputVertical = Input.GetAxis("Vertical");
         inputSprint = Input.GetAxis("Fire3") == 1f;
         inputLeftClick = Input.GetAxis("Fire1") == 1f;
         mouseHorizontalSpeed = Input.GetAxis("Mouse X");
         mouseVerticalSpeed = Input.GetAxis("Mouse Y");
+        Input.GetKeyDown(KeyCode.Alpha1);
+        Input.GetKeyDown(KeyCode.Alpha2);
 
+        //Rotación del punto que hace de referencia para los brazos
         dollyRotation = Mathf.Clamp(dollyRotation - mouseHorizontalSpeed * swingMultiplier, -maxDollyRotation, maxDollyRotation);
         armsDolly.localRotation = Quaternion.Euler(0f, 0f, dollyRotation);
 
+        //Para que los brazos se muevan como quiero, no puedo rotar el dolly, tengo que rotar los "sub" referentes
+        //Una solución de verdad tendría un quaternion bien calculado que sabe aplicar primero la rotación en X y después en Z
         armsPitch = Mathf.Clamp(armsPitch - mouseVerticalSpeed * swingMultiplier, -maxDollyPitch, maxDollyPitch);
         transBaseRight.localRotation = Quaternion.Euler(armsPitch, 0f, 0f);
         transBaseLeft.localRotation = Quaternion.Euler(armsPitch, 0f, 0f);
         
+        //Selección del objeto
 
-        // Unfortunately GetAxis does not work with GetKeyDown, so inputs must be taken individually
-        //inputCrouch = Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.JoystickButton1);
 
         if ( cc.isGrounded && animator != null )
         {
@@ -174,6 +186,17 @@ public class ThirdPersonController : MonoBehaviour
         Vector3 movement = verticalDirection + horizontalDirection;
         cc.Move( movement );
 
+    }
+
+
+    public void ObtainItem(Transform itemModel)
+    {
+        inventory.Add(itemModel);
+        heldItem = itemModel;
+        heldItem.SetParent(this.transform);
+        //heldItem.localPosition += Vector3.up * 3;
+        Debug.Log("levanté un item!");
+        Debug.Log(heldItem);
     }
 
 }
